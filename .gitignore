@@ -1,1 +1,37 @@
+# === Game Boy Output ROMs ===
+*.gb
+*.gbc
+*.pocket
+
+# === GBDK Compiler Intermediate Files ===
+*.o
+*.obj
+*.lst
+*.asm
+*.sym
+*.ihx
+*.map
+*.rel
+*.noi
+*.cdb
+*.adb
+
+# === Emulicious & Emulator Files ===
+# Ignore emulator save files, states, and runtime screenshots
+*.sav
+*.isav
+*.state*
+*.png
+*.bmp
+
+# === IDE Configurations ===
+# Ignore your local VS Code workspace settings (but keep tasks/launch json if you want)
 .vscode/
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# === Operating System Files ===
+Thumbs.db
+.DS_Store
+# === Local Build Scripts ===
+build.bat
