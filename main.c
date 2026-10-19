@@ -30,6 +30,8 @@ void main(void) {
             buttonheld = 0;
         }
         player.y += (player.speed * player.gravity);
+        if(player.y < 17){player.y =17;}
+        if(player.y > 150){player.y =150;}
         move_sprite(0,player.x,player.y);
         wait_vbl_done();
 
