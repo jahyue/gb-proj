@@ -27,7 +27,7 @@ void main(void) {
     set_sprite_data(0,1,player_sprite);
     set_sprite_tile(0,0);
     color(BLACK, WHITE, SOLID); // Set foreground, background, and mode
-    line(0, 10, 159, 10);      // Draw a line
+    line(0, 8, 159, 8);      // Draw a line
     SHOW_SPRITES;
     SHOW_BKG;
     
@@ -47,8 +47,8 @@ void main(void) {
         }
         if(gamestate ==1){
         player.y += (player.speed * player.gravity);
-        if(player.y < 27){player.y =27;}
-        if(player.y > 154){player.y =154;}
+        if(player.y < 24){player.y =24;}
+        if(player.y > 152){player.y = 152;}
         
         }
         move_sprite(0,player.x,player.y);
