@@ -27,7 +27,7 @@ void main(void) {
     set_sprite_data(0,1,player_sprite);
     set_sprite_tile(0,0);
     color(BLACK, WHITE, SOLID); // Set foreground, background, and mode
-    line(0, 8, 159, 8);      // Draw a line
+    
     SHOW_SPRITES;
     SHOW_BKG;
     
@@ -46,10 +46,11 @@ void main(void) {
             buttonheld = false;
         }
         if(gamestate ==1){
+        line(0, 8, 159, 8);      // Draw a line
         player.y += (player.speed * player.gravity);
         if(player.y < 24){player.y =24;}
         if(player.y > 152){player.y = 152;}
-        
+        SHOW_SPRITES;
         }
         move_sprite(0,player.x,player.y);
         score++;
@@ -57,6 +58,7 @@ void main(void) {
         gotogxy(0,0);
         gprintf("score: %u", (unsigned int)score);
         }else{
+        HIDE_SPRITES;
         gotogxy(4,9);
         gprintf("Press Start");
         
