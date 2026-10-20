@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <gb/gb.h>
 #include <gbdk/console.h>
+#include <gb/drawing.h>
 const unsigned char player_sprite[] = {
     0x3C,0x3C,0x42,0x42,0x85,0x85,0x81,0x81,
     0xA5,0xA5,0x81,0x81,0x42,0x42,0x3C,0x3C
@@ -21,6 +22,8 @@ void main(void) {
     player.gravity = 1;
     set_sprite_data(0,1,player_sprite);
     set_sprite_tile(0,0);
+     color(BLACK, WHITE, SOLID); // Set foreground, background, and mode
+    line(0, 10, 159, 10);      // Draw a line
     SHOW_SPRITES;
     SHOW_BKG;
     
@@ -34,11 +37,11 @@ void main(void) {
         }
         player.y += (player.speed * player.gravity);
         if(player.y < 27){player.y =27;}
-        if(player.y > 150){player.y =150;}
+        if(player.y > 154){player.y =154;}
         move_sprite(0,player.x,player.y);
         score++;
-        gotoxy(0,2);
-        printf("score: %u", (unsigned int)score);
+        gotogxy(0,0);
+        gprintf("score: %u", (unsigned int)score);
         wait_vbl_done();
 
     }
