@@ -3,10 +3,11 @@
 #include <gb/gb.h>
 #include <gbdk/console.h>
 #include <gb/drawing.h>
-const unsigned char player_sprite[] = {
-    0x3C,0x3C,0x42,0x42,0x85,0x85,0x81,0x81,
-    0xA5,0xA5,0x81,0x81,0x42,0x42,0x3C,0x3C
+unsigned char player_sprite[] =
+{
+    0xFF,0xFF,0x81,0x81,0x81,0x81,0xA5,0xA5,0x81,0x81,0x99,0x99,0x81,0x81,0xFF,0xFF,
 };
+
 struct GamePlayer {
     uint8_t x;
     uint8_t y;
@@ -39,7 +40,13 @@ void main(void) {
         }
        
         if((joypad() & J_A) && !buttonheld && gamestate == 1){
+            set_sprite_prop(0, S_FLIPY);
             player.gravity = -player.gravity;
+            if(player.gravity == -1){
+                  set_sprite_prop(0, S_FLIPY);
+            }else{
+                set_sprite_prop(0, 0);
+            }
             buttonheld = true;
         }
         if(!(joypad()& J_A)){
