@@ -31,7 +31,7 @@ struct GamePlayer player;
 
 uint16_t score = 0;
 void main(void) {
-    uint8_t gap_row = 11;
+    uint8_t gap_row = 12;
     bool buttonheld = false;
     uint16_t gamestate = 0;
     player.x = 40;
@@ -43,6 +43,10 @@ void main(void) {
     set_sprite_data(0,1,player_sprite);
     set_sprite_tile(0,0);
     for(int i = 1; i< gap_row; i++){
+        set_sprite_tile(i,3);
+        move_sprite(i,126,(i*8)+16);
+    }
+    for(int i = gap_row + 6; i < 18; i++){
         set_sprite_tile(i,3);
         move_sprite(i,126,(i*8)+16);
     }
