@@ -31,7 +31,7 @@ struct GamePlayer player;
 
 uint16_t score = 0;
 void main(void) {
-    uint8_t gap_row = 12;
+    uint8_t gap_row = 4;
     bool buttonheld = false;
     uint16_t gamestate = 0;
     player.x = 40;
@@ -42,14 +42,36 @@ void main(void) {
     
     set_sprite_data(0,1,player_sprite);
     set_sprite_tile(0,0);
-    for(int i = 1; i< gap_row; i++){
-        set_sprite_tile(i,3);
-        move_sprite(i,126,(i*8)+16);
+    for (int i = 1; i < gap_row; i++) {
+    uint8_t tile;
+
+    if (i == gap_row-1) {
+        tile = 3; 
+    } else if(i == 1){
+        tile = 1;
+    } else {
+        tile = 2;  
     }
-    for(int i = gap_row + 6; i < 18; i++){
-        set_sprite_tile(i,3);
-        move_sprite(i,126,(i*8)+16);
+
+    set_sprite_tile(i, tile);
+    move_sprite(i, 126, (i * 8) + 16);
+}
+
+
+for (int i = gap_row + 6; i < 18; i++) {
+    uint8_t tile;
+
+    if (i == 17) {
+        tile = 3; 
+    } else if(i == gap_row + 6){
+        tile = 1;
+    } else {
+        tile = 2;  
     }
+
+    set_sprite_tile(i, tile);
+    move_sprite(i, 126, (i * 8) + 16);
+}
     color(BLACK, WHITE, SOLID); // Set foreground, background, and mode
     SHOW_SPRITES;   
     SHOW_BKG;   
