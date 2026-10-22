@@ -3,22 +3,22 @@
 #include <gb/gb.h>
 #include <gbdk/console.h>
 #include <gb/drawing.h>
+#include <stdlib.h>
+#include <rand.h>
 unsigned char player_sprite[] =
 {
     0xFF,0xFF,0x81,0x81,0x81,0x81,0xA5,0xA5,0x81,0x81,0x99,0x99,0x81,0x81,0xFF,0xFF,
 };
-unsigned char PipeSetTiles[] =
+
+unsigned char PipesetTiles[] =
 {
     0xFF,0xFF,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,
     0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,
     0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0xFF,0xFF,
 };
-
-unsigned char PipeSetMap[] =
+unsigned char PipesetMap[] =
 {
-    0x00,
-    0x01,
-    0x02,
+    0x00,0x01,0x02,
 };
 struct GamePlayer {
     uint8_t x;
@@ -31,18 +31,24 @@ struct GamePlayer player;
 
 uint16_t score = 0;
 void main(void) {
+    uint8_t gap_row = 11;
     bool buttonheld = false;
     uint16_t gamestate = 0;
     player.x = 40;
     player.y = 70;
-    player.speed = 1;
+    player.speed = 2;
     player.gravity = 1;
+    set_sprite_data(1,3,PipesetTiles);
+    
     set_sprite_data(0,1,player_sprite);
     set_sprite_tile(0,0);
+    for(int i = 1; i< gap_row; i++){
+        set_sprite_tile(i,3);
+        move_sprite(i,126,(i*8)+16);
+    }
     color(BLACK, WHITE, SOLID); // Set foreground, background, and mode
-    
-    SHOW_SPRITES;
-    SHOW_BKG;
+    SHOW_SPRITES;   
+    SHOW_BKG;   
     
     while(1) {
          if(joypad() & J_START){
@@ -55,6 +61,7 @@ void main(void) {
             set_sprite_prop(0, S_FLIPY);
             player.gravity = -player.gravity;
             if(player.gravity == -1){
+
                   set_sprite_prop(0, S_FLIPY);
             }else{
                 set_sprite_prop(0, 0);
@@ -69,7 +76,9 @@ void main(void) {
         player.y += (player.speed * player.gravity);
         if(player.y < 24){player.y =24;}
         if(player.y > 152){player.y = 152;}
+        
         SHOW_SPRITES;
+         
         }
         move_sprite(0,player.x,player.y);
         score++;
