@@ -31,7 +31,7 @@ struct GamePlayer player;
 
 uint16_t score = 0;
 void main(void) {
-    uint8_t gap_row = 4;
+    uint8_t gap_row = 7;
     bool buttonheld = false;
     uint16_t gamestate = 0;
     player.x = 40;
@@ -61,10 +61,10 @@ void main(void) {
 for (int i = gap_row + 6; i < 18; i++) {
     uint8_t tile;
 
-    if (i == 17) {
-        tile = 3; 
-    } else if(i == gap_row + 6){
-        tile = 1;
+    if (i == gap_row + 6) {
+        tile = 1; 
+    } else if(i == 17){
+        tile = 3;
     } else {
         tile = 2;  
     }
