@@ -42,6 +42,8 @@ void main(void) {
     
     set_sprite_data(0,1,player_sprite);
     set_sprite_tile(0,0);
+    
+uint8_t pipe_x = 160;
     for (int i = 1; i < gap_row; i++) {
     uint8_t tile;
 
@@ -54,9 +56,8 @@ void main(void) {
     }
 
     set_sprite_tile(i, tile);
-    move_sprite(i, 126, (i * 8) + 16);
+    move_sprite(i, pipe_x, (i * 8) + 16);
 }
-
 
 for (int i = gap_row + 6; i < 18; i++) {
     uint8_t tile;
@@ -70,7 +71,7 @@ for (int i = gap_row + 6; i < 18; i++) {
     }
 
     set_sprite_tile(i, tile);
-    move_sprite(i, 126, (i * 8) + 16);
+    move_sprite(i, pipe_x, (i * 8) + 16);
 }
     color(BLACK, WHITE, SOLID); // Set foreground, background, and mode
     SHOW_SPRITES;   
@@ -102,12 +103,23 @@ for (int i = gap_row + 6; i < 18; i++) {
         player.y += (player.speed * player.gravity);
         if(player.y < 24){player.y =24;}
         if(player.y > 152){player.y = 152;}
-        
+        if (pipe_x > 8) {
+        pipe_x--;
+    } else {
+        pipe_x = 160;
+        gap_row = 9;
+    }
+        for (int i = 1; i < gap_row; i++) {
+            move_sprite(i, pipe_x, (i * 8) + 16);
+}
+
+        for (int i = gap_row + 6; i < 18; i++) {
+            move_sprite(i, pipe_x, (i * 8) + 16);
+}           
         SHOW_SPRITES;
          
         }
         move_sprite(0,player.x,player.y);
-        score++;
         if(gamestate == 1){
         gotogxy(0,0);
         gprintf("score: %u", (unsigned int)score);
