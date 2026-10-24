@@ -10,6 +10,7 @@
 #define STATE_READY     1
 #define STATE_PLAYING   2
 #define STATE_GAME_OVER 3
+
 unsigned char player_sprite[] =
 {
     0xFF,0xFF,0x81,0x81,0x81,0x81,0xA5,0xA5,0x81,0x81,0x99,0x99,0x81,0x81,0xFF,0xFF,
@@ -21,10 +22,7 @@ unsigned char PipesetTiles[] =
     0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,
     0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0x81,0xFF,0xFF,
 };
-unsigned char PipesetMap[] =
-{
-    0x00,0x01,0x02,
-};
+
 struct GamePlayer {
     uint8_t x;
     uint8_t y;
@@ -34,11 +32,14 @@ struct GamePlayer {
 
 struct GamePlayer player;
 
+bool buttonheld = false;
+uint16_t gamestate = STATE_TITLE;
+
 uint16_t score = 0;
 void main(void) {
-    uint8_t gap_row = 7;
-    bool buttonheld = false;
-    uint16_t gamestate = STATE_TITLE;
+    initrand(DIV_REG);
+    uint8_t gap_row = 1 + (rand() % 12);
+
     player.x = 40;
     player.y = 70;
     player.speed = 2;
@@ -112,7 +113,7 @@ for (int i = gap_row + 6; i < 18; i++) {
         pipe_x--;
     } else {
         pipe_x = 160;
-        gap_row = 9;
+        gap_row = 1 + (rand() % 12);
     }
         for (int i = 1; i < gap_row; i++) {
             move_sprite(i, pipe_x, (i * 8) + 16);
