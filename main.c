@@ -5,6 +5,11 @@
 #include <gb/drawing.h>
 #include <stdlib.h>
 #include <rand.h>
+
+#define STATE_TITLE     0
+#define STATE_READY     1
+#define STATE_PLAYING   2
+#define STATE_GAME_OVER 3
 unsigned char player_sprite[] =
 {
     0xFF,0xFF,0x81,0x81,0x81,0x81,0xA5,0xA5,0x81,0x81,0x99,0x99,0x81,0x81,0xFF,0xFF,
@@ -33,7 +38,7 @@ uint16_t score = 0;
 void main(void) {
     uint8_t gap_row = 7;
     bool buttonheld = false;
-    uint16_t gamestate = 0;
+    uint16_t gamestate = STATE_TITLE;
     player.x = 40;
     player.y = 70;
     player.speed = 2;
@@ -79,7 +84,7 @@ for (int i = gap_row + 6; i < 18; i++) {
     
     while(1) {
          if(joypad() & J_START){
-            gamestate = 1;
+            gamestate = STATE_PLAYING;
             gotogxy(4,9);
         gprintf("           ");
         }
@@ -98,7 +103,7 @@ for (int i = gap_row + 6; i < 18; i++) {
         if(!(joypad()& J_A)){
             buttonheld = false;
         }
-        if(gamestate ==1){
+        if(gamestate == STATE_PLAYING){
         line(0, 8, 159, 8);      // Draw a line
         player.y += (player.speed * player.gravity);
         if(player.y < 24){player.y =24;}
@@ -120,7 +125,7 @@ for (int i = gap_row + 6; i < 18; i++) {
          
         }
         move_sprite(0,player.x,player.y);
-        if(gamestate == 1){
+        if(gamestate == STATE_PLAYING){
         gotogxy(0,0);
         gprintf("score: %u", (unsigned int)score);
         }else{
