@@ -31,15 +31,14 @@ struct GamePlayer {
 };
 
 struct GamePlayer player;
-
+    
+uint8_t pipe_x = 160;
+uint8_t gap_row = 12;
 bool buttonheld = false;
 uint16_t gamestate = STATE_TITLE;
 
 uint16_t score = 0;
-void main(void) {
-    initrand(DIV_REG);
-    uint8_t gap_row = 1 + (rand() % 12);
-
+void initgame(void){
     player.x = 40;
     player.y = 70;
     player.speed = 2;
@@ -47,41 +46,71 @@ void main(void) {
     set_sprite_data(1,3,PipesetTiles);
     
     set_sprite_data(0,1,player_sprite);
-    set_sprite_tile(0,0);
-    
-uint8_t pipe_x = 160;
-    for (int i = 1; i < gap_row; i++) {
-    uint8_t tile;
-
-    if (i == gap_row-1) {
-        tile = 3; 
-    } else if(i == 1){
-        tile = 1;
-    } else {
-        tile = 2;  
-    }
-
-    set_sprite_tile(i, tile);
-    move_sprite(i, pipe_x, (i * 8) + 16);
-}
-
-for (int i = gap_row + 6; i < 18; i++) {
-    uint8_t tile;
-
-    if (i == gap_row + 6) {
-        tile = 1; 
-    } else if(i == 17){
-        tile = 3;
-    } else {
-        tile = 2;  
-    }
-
-    set_sprite_tile(i, tile);
-    move_sprite(i, pipe_x, (i * 8) + 16);
-}
+    set_sprite_tile(0,0); 
     color(BLACK, WHITE, SOLID); // Set foreground, background, and mode
     SHOW_SPRITES;   
     SHOW_BKG;   
+}
+void updateplayer(void){
+    player.y += player.speed * player.gravity;
+
+    if (player.y < 24) {
+        player.y = 24;
+    }
+
+    if (player.y > 152) {
+        player.y = 152;
+    }
+
+    move_sprite(0, player.x, player.y);
+}
+
+void updatepipes(void){
+    if (pipe_x > 8) {
+        pipe_x--;
+    } else {
+        pipe_x = 160;
+        gap_row = 1 + (rand() % 12);
+    }
+    drawpipes();
+}
+void drawpipes(void) {
+
+    for (uint8_t i = 1; i < gap_row; i++) {
+        if (i == 1) {
+            set_sprite_tile(i, 1);  
+        } else if (i == gap_row - 1) {
+            set_sprite_tile(i, 3);  
+        } else {
+            set_sprite_tile(i, 2);
+
+        move_sprite(i, pipe_x, (i * 8) + 16);
+    }
+}
+    for (uint8_t i = gap_row + 6; i < 18; i++) {
+        if (i == gap_row + 6) {
+            set_sprite_tile(i, 1); 
+        } else if (i == 17) {
+            set_sprite_tile(i, 3);  
+        } else {
+            set_sprite_tile(i, 2);  
+        }
+
+        move_sprite(i, pipe_x, (i * 8) + 16);
+    }
+
+    for (uint8_t i = gap_row; i < gap_row + 6; i++) {
+        move_sprite(i, 0, 0);
+    }
+}
+
+void main(void) {
+    initrand(DIV_REG);
+    initgame();
+    gap_row = 1 + (rand() % 12);
+
+    drawpipes();
+    
     
     while(1) {
          if(joypad() & J_START){
@@ -90,7 +119,7 @@ for (int i = gap_row + 6; i < 18; i++) {
         gprintf("           ");
         }
        
-        if((joypad() & J_A) && !buttonheld && gamestate == 1){
+        if((joypad() & J_A) && !buttonheld && gamestate == STATE_PLAYING){
             set_sprite_prop(0, S_FLIPY);
             player.gravity = -player.gravity;
             if(player.gravity == -1){
@@ -106,22 +135,8 @@ for (int i = gap_row + 6; i < 18; i++) {
         }
         if(gamestate == STATE_PLAYING){
         line(0, 8, 159, 8);      // Draw a line
-        player.y += (player.speed * player.gravity);
-        if(player.y < 24){player.y =24;}
-        if(player.y > 152){player.y = 152;}
-        if (pipe_x > 8) {
-        pipe_x--;
-    } else {
-        pipe_x = 160;
-        gap_row = 1 + (rand() % 12);
-    }
-        for (int i = 1; i < gap_row; i++) {
-            move_sprite(i, pipe_x, (i * 8) + 16);
-}
-
-        for (int i = gap_row + 6; i < 18; i++) {
-            move_sprite(i, pipe_x, (i * 8) + 16);
-}           
+        updateplayer();
+        updatepipes();
         SHOW_SPRITES;
          
         }
