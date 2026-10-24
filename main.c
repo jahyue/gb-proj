@@ -64,16 +64,6 @@ void updateplayer(void){
 
     move_sprite(0, player.x, player.y);
 }
-
-void updatepipes(void){
-    if (pipe_x > 8) {
-        pipe_x--;
-    } else {
-        pipe_x = 160;
-        gap_row = 1 + (rand() % 12);
-    }
-    drawpipes();
-}
 void drawpipes(void) {
 
     for (uint8_t i = 1; i < gap_row; i++) {
@@ -83,10 +73,10 @@ void drawpipes(void) {
             set_sprite_tile(i, 3);  
         } else {
             set_sprite_tile(i, 2);
-
+        }
         move_sprite(i, pipe_x, (i * 8) + 16);
     }
-}
+
     for (uint8_t i = gap_row + 6; i < 18; i++) {
         if (i == gap_row + 6) {
             set_sprite_tile(i, 1); 
@@ -103,6 +93,16 @@ void drawpipes(void) {
         move_sprite(i, 0, 0);
     }
 }
+void updatepipes(void){
+    if (pipe_x > 8) {
+        pipe_x--;
+    } else {
+        pipe_x = 160;
+        gap_row = 1 + (rand() % 12);
+    }
+    drawpipes();
+}
+
 
 void main(void) {
     initrand(DIV_REG);
