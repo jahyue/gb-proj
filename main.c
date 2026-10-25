@@ -41,7 +41,7 @@ uint16_t score = 0;
 void initgame(void){
     player.x = 40;
     player.y = 70;
-    player.speed = 2;
+    player.speed = 1;
     player.gravity = 1;
     set_sprite_data(1,3,PipesetTiles);
     
@@ -67,10 +67,11 @@ void updateplayer(void){
 void drawpipes(void) {
 
     for (uint8_t i = 1; i < gap_row; i++) {
-        if (i == 1) {
-            set_sprite_tile(i, 1);  
-        } else if (i == gap_row - 1) {
+        if (i == gap_row - 1) {
             set_sprite_tile(i, 3);  
+        
+        } else if (i == 1) {
+            set_sprite_tile(i, 1);  
         } else {
             set_sprite_tile(i, 2);
         }
@@ -103,7 +104,11 @@ void updatepipes(void){
     drawpipes();
 }
 
-
+void updatescore(void){
+    if(player.x == pipe_x){
+        score++;
+    }
+}
 void main(void) {
     initrand(DIV_REG);
     initgame();
@@ -137,6 +142,7 @@ void main(void) {
         line(0, 8, 159, 8);      // Draw a line
         updateplayer();
         updatepipes();
+        updatescore();
         SHOW_SPRITES;
          
         }
