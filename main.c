@@ -52,6 +52,7 @@
         SHOW_BKG;   
     }
     void updateplayer(void){
+        if(gamestate == STATE_PLAYING){
         player.y += player.speed * player.gravity;
 
         if (player.y < 24) {
@@ -61,7 +62,7 @@
         if (player.y > 152) {
             player.y = 152;
         }
-
+    }
         move_sprite(0, player.x, player.y);
     }
     void drawpipes(void) {
@@ -95,12 +96,14 @@
         }
     }
     void updatepipes(void){
+        if(gamestate == STATE_PLAYING){
         if (pipe_x > 8) {
             pipe_x--;
         } else {
             pipe_x = 160;
             gap_row = 1 + (rand() % 12);
         }
+    }
         drawpipes();
     }
 
@@ -108,8 +111,11 @@
         if(player.x == pipe_x){
             if(player.y > (gap_row * 8) + 16 && player.y < (gap_row * 8) + 64){
             score++;
+            } else {
+                gamestate = STATE_GAME_OVER;
             }
         }
+        
     }
     void main(void) {
         initrand(DIV_REG);
@@ -121,12 +127,13 @@
         
         while(1) {
             if(joypad() & J_START){
-                gamestate = STATE_PLAYING;
-                gotogxy(4,9);
-            gprintf("           ");
+                gamestate = STATE_READY;
+        
+            
             }
         
             if((joypad() & J_A) && !buttonheld && gamestate == STATE_PLAYING){
+
                 set_sprite_prop(0, S_FLIPY);
                 player.gravity = -player.gravity;
                 if(player.gravity == -1){
@@ -136,23 +143,29 @@
                     set_sprite_prop(0, 0);
                 }
                 buttonheld = true;
+            }else if((joypad() & J_A) && !buttonheld && gamestate == STATE_READY){
+                gamestate = STATE_PLAYING;
             }
             if(!(joypad()& J_A)){
                 buttonheld = false;
             }
-            if(gamestate == STATE_PLAYING){
+            if(gamestate == STATE_READY){
+            gotogxy(4,9);
+            gprintf("           ");
             line(0, 8, 159, 8);      // Draw a line
-            updateplayer();
-            updatepipes();
-            updatescore();
+            
             SHOW_SPRITES;
             
+            }else if(gamestate == STATE_PLAYING){
+                updateplayer();
+            updatepipes();
+            updatescore();
             }
             move_sprite(0,player.x,player.y);
             if(gamestate == STATE_PLAYING){
             gotogxy(0,0);
             gprintf("score: %u", (unsigned int)score);
-            }else{
+            }else if(gamestate == STATE_TITLE){
             HIDE_SPRITES;
             gotogxy(4,9);
             gprintf("Press Start");
