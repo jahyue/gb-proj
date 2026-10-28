@@ -126,7 +126,7 @@
         
         
         while(1) {
-            if(joypad() & J_START){
+            if(joypad() & J_START && gamestate == STATE_TITLE){
                 gamestate = STATE_READY;
         
             
@@ -151,15 +151,20 @@
             }
             if(gamestate == STATE_READY){
             gotogxy(4,9);
-            gprintf("           ");
+            gprintf("Press A to Flip Gravity");
             line(0, 8, 159, 8);      // Draw a line
             
             SHOW_SPRITES;
             
             }else if(gamestate == STATE_PLAYING){
-                updateplayer();
+            gotogxy(4,9);
+            gprintf("                       ");
+            updateplayer();
             updatepipes();
             updatescore();
+            }else if(gamestate == STATE_GAME_OVER){
+        gotogxy(4,9);
+            gprintf("Game Over              ");
             }
             move_sprite(0,player.x,player.y);
             if(gamestate == STATE_PLAYING){
